@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onosproject.cordmcast;
+package org.opencord.cordmcast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -37,9 +37,7 @@ import org.onlab.packet.VlanId;
 import org.onosproject.cfg.ComponentConfigService;
 import org.onosproject.codec.CodecService;
 import org.onosproject.codec.JsonCodec;
-import org.onosproject.cordconfig.access.AccessAgentData;
-import org.onosproject.cordconfig.access.AccessDeviceData;
-import org.onosproject.cordconfig.access.CordConfigService;
+
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.net.ConnectPoint;
@@ -60,6 +58,9 @@ import org.onosproject.net.mcast.McastRoute;
 import org.onosproject.net.mcast.McastRouteInfo;
 import org.onosproject.net.mcast.MulticastRouteService;
 import org.onosproject.rest.AbstractWebResource;
+import org.opencord.cordconfig.access.AccessAgentData;
+import org.opencord.cordconfig.access.AccessDeviceData;
+import org.opencord.cordconfig.access.CordConfigService;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 

@@ -17,4 +17,4 @@
 /**
  * Application for provisioning multicast streams in the context of cord.
  */
-package org.onosproject.cordmcast;
+package org.opencord.cordmcast;
