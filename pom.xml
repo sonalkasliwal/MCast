@@ -34,7 +34,7 @@
     <description>CORD Multicast application</description>
 
     <properties>
-        <onos.app.name>org.onosproject.cordmcast</onos.app.name>
+        <onos.app.name>org.opencord.mcast</onos.app.name>
         <onos.version>1.6.0-SNAPSHOT</onos.version>
         <onos.app.category>Traffic Steering</onos.app.category>
         <onos.app.title>CORD Multicast App</onos.app.title>
