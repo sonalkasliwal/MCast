@@ -60,7 +60,7 @@ import org.onosproject.net.mcast.MulticastRouteService;
 import org.onosproject.rest.AbstractWebResource;
 import org.opencord.cordconfig.access.AccessAgentData;
 import org.opencord.cordconfig.access.AccessDeviceData;
-import org.opencord.cordconfig.access.CordConfigService;
+import org.opencord.cordconfig.CordConfigService;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 
