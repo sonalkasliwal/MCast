@@ -41,6 +41,11 @@ import org.onosproject.codec.JsonCodec;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.net.ConnectPoint;
+import org.onosproject.net.config.ConfigFactory;
+import org.onosproject.net.config.NetworkConfigEvent;
+import org.onosproject.net.config.NetworkConfigListener;
+import org.onosproject.net.config.NetworkConfigRegistry;
+import org.onosproject.net.config.basics.SubjectFactories;
 import org.onosproject.net.flow.DefaultTrafficSelector;
 import org.onosproject.net.flow.DefaultTrafficTreatment;
 import org.onosproject.net.flow.TrafficSelector;
@@ -63,6 +68,7 @@ import org.opencord.cordconfig.access.AccessDeviceData;
 import org.opencord.cordconfig.CordConfigService;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
+import org.onosproject.incubator.net.config.basics.McastConfig;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
@@ -121,15 +127,18 @@ public class CordMcast {
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     protected CordConfigService cordConfigService;
 
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    protected NetworkConfigRegistry networkConfig;
+
     protected McastListener listener = new InternalMulticastListener();
+    private InternalNetworkConfigListener configListener =
+            new InternalNetworkConfigListener();
 
     //TODO: move this to a ec map
     private Map<IpAddress, Integer> groups = Maps.newConcurrentMap();
 
     private ApplicationId appId;
-
-    @Property(name = "mcastVlan", intValue = DEFAULT_MCAST_VLAN,
-            label = "VLAN for multicast traffic")
+    private ApplicationId coreAppId;
     private int mcastVlan = DEFAULT_MCAST_VLAN;
 
     @Property(name = "vlanEnabled", boolValue = DEFAULT_VLAN_ENABLED,
@@ -153,6 +162,17 @@ public class CordMcast {
     private String password = DEFAULT_PASSWORD;
 
     private String fabricOnosUrl;
+    private static final Class<McastConfig> CORD_MCAST_CONFIG_CLASS =
+            McastConfig.class;
+
+    private ConfigFactory<ApplicationId, McastConfig> cordMcastConfigFactory =
+            new ConfigFactory<ApplicationId, McastConfig>(
+                    SubjectFactories.APP_SUBJECT_FACTORY, CORD_MCAST_CONFIG_CLASS, "multicast") {
+                @Override
+                public McastConfig createConfig() {
+                    return new McastConfig();
+                }
+            };
 
     @Activate
     public void activate(ComponentContext context) {
@@ -160,9 +180,11 @@ public class CordMcast {
         modified(context);
 
         appId = coreService.registerApplication("org.onosproject.cordmcast");
+        coreAppId = coreService.registerApplication(CoreService.CORE_APP_NAME);
 
         clearRemoteRoutes();
-
+        networkConfig.registerConfigFactory(cordMcastConfigFactory);
+        networkConfig.addListener(configListener);
         mcastService.addListener(listener);
 
         mcastService.getRoutes().stream()
@@ -171,6 +193,11 @@ public class CordMcast {
                 .forEach(pair -> pair.getRight().forEach(sink -> provisionGroup(pair.getLeft(),
                         sink)));
 
+        McastConfig config = networkConfig.getConfig(coreAppId, CORD_MCAST_CONFIG_CLASS);
+        if (config != null) {
+            mcastVlan = config.egressVlan().toShort();
+        }
+
         log.info("Started");
     }
 
@@ -178,6 +205,7 @@ public class CordMcast {
     public void deactivate() {
         componentConfigService.unregisterProperties(getClass(), false);
         mcastService.removeListener(listener);
+        networkConfig.removeListener(configListener);
         log.info("Stopped");
     }
 
@@ -191,9 +219,6 @@ public class CordMcast {
 
             s = get(properties, "password");
             password = isNullOrEmpty(s) ? DEFAULT_PASSWORD : s.trim();
-
-            s = get(properties, "mcastVlan");
-            mcastVlan = isNullOrEmpty(s) ? DEFAULT_MCAST_VLAN : Short.parseShort(s.trim());
 
             s = get(properties, "vlanEnabled");
             vlanEnabled = isNullOrEmpty(s) ? DEFAULT_VLAN_ENABLED : Boolean.parseBoolean(s.trim());
@@ -488,4 +513,28 @@ public class CordMcast {
         return wt.request(JSON_UTF_8.toString());
     }
 
+    private class InternalNetworkConfigListener implements NetworkConfigListener {
+        @Override
+        public void event(NetworkConfigEvent event) {
+            switch (event.type()) {
+
+                case CONFIG_ADDED:
+                case CONFIG_UPDATED:
+                    if (event.configClass().equals(CORD_MCAST_CONFIG_CLASS)) {
+                        McastConfig config = networkConfig.getConfig(coreAppId, CORD_MCAST_CONFIG_CLASS);
+                        if (config != null) {
+                            mcastVlan = config.egressVlan().toShort();
+                        }
+                    }
+                    break;
+                case CONFIG_REGISTERED:
+                case CONFIG_UNREGISTERED:
+                case CONFIG_REMOVED:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
+
