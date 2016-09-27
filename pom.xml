@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.onosproject</groupId>
         <artifactId>onos</artifactId>
-        <version>1.7.0-SNAPSHOT</version>
+        <version>1.7.0</version>
         <relativePath></relativePath>
     </parent>
 
@@ -31,21 +31,11 @@
     <version>1.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-<!--      
-      <repositories>
-        <repository>
-          <id>oss-staging</id>
-          <name>OSS Staging</name>
-          <url>https://oss.sonatype.org/content/groups/staging</url>
-        </repository>
-      </repositories>
--->
-
     <description>CORD Multicast application</description>
 
     <properties>
         <onos.app.name>org.opencord.mcast</onos.app.name>
-        <onos.version>1.7.0-SNAPSHOT</onos.version>
+        <onos.version>1.7.0</onos.version>
         <onos.app.category>Traffic Steering</onos.app.category>
         <onos.app.title>CORD Multicast App</onos.app.title>
         <onos.app.url>http://opencord.org</onos.app.url>
@@ -116,6 +106,12 @@
             <version>${onos.version}</version>
         </dependency>
 
+         <dependency>
+            <groupId>org.onosproject</groupId>
+            <artifactId>onos-incubator-net</artifactId>
+            <version>${onos.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.onosproject</groupId>
             <artifactId>onos-api</artifactId>
@@ -128,33 +124,6 @@
             <version>${onos.version}</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>http://repo.maven.apache.org/maven2</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
