@@ -21,8 +21,8 @@
 
     <parent>
         <groupId>org.onosproject</groupId>
-        <artifactId>onos</artifactId>
-        <version>1.7.1</version>
+        <artifactId>onos-dependencies</artifactId>
+        <version>1.8.0</version>
         <relativePath></relativePath>
     </parent>
 
@@ -35,7 +35,7 @@
 
     <properties>
         <onos.app.name>org.opencord.mcast</onos.app.name>
-        <onos.version>1.7.1</onos.version>
+        <onos.version>1.8.0</onos.version>
         <onos.app.category>Traffic Steering</onos.app.category>
         <onos.app.title>CORD Multicast App</onos.app.title>
         <onos.app.url>http://opencord.org</onos.app.url>
@@ -48,51 +48,12 @@
             <artifactId>onos-cli</artifactId>
             <version>${onos.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.opencord</groupId>
-            <artifactId>cord-config</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.shell</groupId>
-            <artifactId>org.apache.karaf.shell.console</artifactId>
-        </dependency>
-      <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.onosproject</groupId>
-        <artifactId>onlab-misc</artifactId>
-        <version>${onos.version}</version>
-      </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-            <version>5.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>2.22.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opencord</groupId>
-            <artifactId>olt-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr.annotations</artifactId>
-            <scope>provided</scope>
+            <groupId>org.onosproject</groupId>
+            <artifactId>onlab-misc</artifactId>
+            <version>${onos.version}</version>
         </dependency>
-
-        <!-- TODO FIX ONOS ROOT POM to split thirdparty and onos dependencies -->
 
         <dependency>
             <groupId>org.onosproject</groupId>
@@ -122,6 +83,18 @@
             <groupId>org.onosproject</groupId>
             <artifactId>onos-core-common</artifactId>
             <version>${onos.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opencord</groupId>
+            <artifactId>cord-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opencord</groupId>
+            <artifactId>olt-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -192,4 +165,30 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://repo.maven.apache.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
