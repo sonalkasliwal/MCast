@@ -98,6 +98,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 @Component(immediate = true)
 public class CordMcast {
+    private static final String APP_NAME = "org.opencord.cordmcast";
 
     private final Logger log = getLogger(getClass());
 
@@ -179,7 +180,7 @@ public class CordMcast {
         componentConfigService.registerProperties(getClass());
         modified(context);
 
-        appId = coreService.registerApplication("org.onosproject.cordmcast");
+        appId = coreService.registerApplication(APP_NAME);
         coreAppId = coreService.registerApplication(CoreService.CORE_APP_NAME);
 
         clearRemoteRoutes();
