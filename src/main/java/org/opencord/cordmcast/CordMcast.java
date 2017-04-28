@@ -152,7 +152,7 @@ public class CordMcast {
 
     @Property(name = "syncHost", value = DEFAULT_SYNC_HOST,
             label = "host:port to synchronize routes to")
-    private String syncHost = DEFAULT_SYNC_HOST;
+    private String syncHost = null;
 
     @Property(name = "username", value = DEFAULT_USER,
             label = "Username for REST password authentication")
@@ -228,11 +228,11 @@ public class CordMcast {
             priority = isNullOrEmpty(s) ? DEFAULT_PRIORITY : Integer.parseInt(s.trim());
 
             s = get(properties, "syncHost");
-            syncHost = isNullOrEmpty(s) ? DEFAULT_SYNC_HOST : s.trim();
+            syncHost = isNullOrEmpty(s) ? null : s.trim();
         } catch (Exception e) {
             user = DEFAULT_USER;
             password = DEFAULT_PASSWORD;
-            syncHost = DEFAULT_SYNC_HOST;
+            syncHost = null;
             mcastVlan = DEFAULT_MCAST_VLAN;
             vlanEnabled = false;
             priority = DEFAULT_PRIORITY;
