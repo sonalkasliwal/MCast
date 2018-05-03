@@ -71,7 +71,7 @@ import org.opencord.cordconfig.access.AccessDeviceData;
 import org.opencord.cordconfig.CordConfigService;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
-import org.onosproject.incubator.net.config.basics.McastConfig;
+import org.onosproject.net.config.basics.McastConfig;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
