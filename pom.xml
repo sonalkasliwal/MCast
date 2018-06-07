@@ -40,8 +40,8 @@
         <onos.app.title>CORD Multicast App</onos.app.title>
         <onos.app.url>http://opencord.org</onos.app.url>
         <onos.app.requires>org.opencord.config</onos.app.requires>
-        <cord.config.version>1.4.0-SNAPSHOT</cord.config.version>
-        <olt.api.version>1.4.0-SNAPSHOT</olt.api.version>
+        <cord.config.version>1.4.0</cord.config.version>
+        <olt.api.version>1.4.0</olt.api.version>
     </properties>
 
     <dependencies>
