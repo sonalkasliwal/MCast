@@ -47,61 +47,23 @@
     <dependencies>
         <dependency>
             <groupId>org.onosproject</groupId>
-            <artifactId>onos-cli</artifactId>
-            <version>${onos.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.onosproject</groupId>
-            <artifactId>onlab-misc</artifactId>
-            <version>${onos.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.onosproject</groupId>
             <artifactId>onlab-osgi</artifactId>
             <version>${onos.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.onosproject</groupId>
-            <artifactId>onos-incubator-api</artifactId>
-            <version>${onos.version}</version>
-        </dependency>
-
-         <dependency>
-            <groupId>org.onosproject</groupId>
-            <artifactId>onos-incubator-net</artifactId>
-            <version>${onos.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.onosproject</groupId>
             <artifactId>onos-api</artifactId>
             <version>${onos.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.onosproject</groupId>
-            <artifactId>onos-core-common</artifactId>
-            <version>${onos.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.opencord</groupId>
             <artifactId>cord-config</artifactId>
             <version>${cord.config.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.opencord</groupId>
-            <artifactId>olt-api</artifactId>
-            <version>${olt.api.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
+            <groupId>org.onosproject</groupId>
+            <artifactId>onos-apps-mcast-api</artifactId>
+            <version>${onos.version}</version>
         </dependency>
     </dependencies>
 
