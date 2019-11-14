@@ -18,13 +18,12 @@ package org.opencord.cordmcast;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Modified;
-import org.apache.felix.scr.annotations.Property;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.onlab.packet.Ethernet;
 import org.onlab.packet.IpAddress;
 import org.onlab.packet.VlanId;
@@ -88,6 +87,10 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 import static org.onlab.util.Tools.get;
 import static org.onlab.util.Tools.groupedThreads;
+import static org.opencord.cordmcast.OsgiPropertyConstants.DEFAULT_VLAN_ENABLED;
+import static org.opencord.cordmcast.OsgiPropertyConstants.DEFAULT_PRIORITY;
+import static org.opencord.cordmcast.OsgiPropertyConstants.PRIORITY;
+import static org.opencord.cordmcast.OsgiPropertyConstants.VLAN_ENABLED;
 import static org.slf4j.LoggerFactory.getLogger;
 
 
@@ -96,7 +99,11 @@ import static org.slf4j.LoggerFactory.getLogger;
  * events on the multicast rib and provisioning groups to program multicast
  * flows on the dataplane.
  */
-@Component(immediate = true)
+@Component(immediate = true,
+        property = {
+        VLAN_ENABLED + ":Boolean=" + DEFAULT_VLAN_ENABLED,
+        PRIORITY + ":Integer=" + DEFAULT_PRIORITY,
+})
 public class CordMcast {
     private static final String APP_NAME = "org.opencord.cordmcast";
 
@@ -104,42 +111,38 @@ public class CordMcast {
 
     private static final int DEFAULT_PRIORITY = 500;
     private static final short DEFAULT_MCAST_VLAN = 4000;
-    private static final boolean DEFAULT_VLAN_ENABLED = true;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected MulticastRouteService mcastService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected FlowObjectiveService flowObjectiveService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected CoreService coreService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected ComponentConfigService componentConfigService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected CordConfigService cordConfigService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected NetworkConfigRegistry networkConfig;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    protected FlowRuleService flowRuleService;
-
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected StorageService storageService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected MastershipService mastershipService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     public DeviceService deviceService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     private ClusterService clusterService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     private LeadershipService leadershipService;
 
     protected McastListener listener = new InternalMulticastListener();
@@ -152,12 +155,14 @@ public class CordMcast {
     private ApplicationId coreAppId;
     private short mcastVlan = DEFAULT_MCAST_VLAN;
 
-    @Property(name = "vlanEnabled", boolValue = DEFAULT_VLAN_ENABLED,
-            label = "Use vlan for multicast traffic?")
+    /**
+     * Whether to use VLAN for multicast traffic.
+     **/
     private boolean vlanEnabled = DEFAULT_VLAN_ENABLED;
 
-    @Property(name = "priority", intValue = DEFAULT_PRIORITY,
-            label = "Priority for multicast rules")
+    /**
+     * Priority for multicast rules.
+     **/
     private int priority = DEFAULT_PRIORITY;
 
     private static final Class<McastConfig> CORD_MCAST_CONFIG_CLASS =
